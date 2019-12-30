@@ -23,13 +23,13 @@ double resta(double a, double b);
 double multiplicacion(double a, double b);
 double division(double a, double b);
 double raiz(double a);
-double seno(double radianes);
-double coseno(double radianes);
+double seno(double grados);
+double coseno(double grados);
 double tangente(double seno, double coseno);
-double conversorRadianes(double grados);
+double conversorGrados(double grados);
 int main()
 {
-  double a, b, resultado, senoA, cosenoA, radianes;
+  double a, b, resultado, senoA, cosenoA, grados;
   printf("Introduce el valor de a: ");
   scanf("%lf", &a);
   printf("Introduce el valor de b: ");
@@ -46,10 +46,11 @@ int main()
   printf("La ra\241z de a es: %lf\n",resultado);
   resultado = raiz(b);
   printf("La ra\241z de b es: %lf\n",resultado);
-  radianes = conversorRadianes(a);
-  senoA = seno(radianes);
+  /*Si necesitas el valor de las funciones trigonometricas en radianes comenta la siguiente linea y pasa a grados el valor de a */
+  grados = conversorGrados(a);
+  senoA = seno(grados);
   printf("El seno de a es: %lf\n",senoA);
-  cosenoA = coseno(radianes);
+  cosenoA = coseno(grados);
   printf("El coseno de a es: %lf \n", cosenoA);
   resultado = tangente(senoA, cosenoA);
   printf("La tangente es: %lf", resultado);
@@ -100,19 +101,19 @@ double raiz(double a){
     return resultado;
 }
 
-double seno(double radianes){
+double seno(double grados){
     double resultado;
     __asm__ ("fldl %1;"
-             "fsin;" /* calcular la funcion seno del valor en radianes del registro de la pila y guardar en st0 */
-             "fstpl %0;" : "=m" (resultado) : "m" (radianes));
+             "fsin;" /* calcular la funcion seno del valor en grados del registro de la pila y guardar en st0 */
+             "fstpl %0;" : "=m" (resultado) : "m" (grados));
     return resultado;
 }
 
-double coseno(double radianes){
+double coseno(double grados){
     double resultado;
     __asm__ ("fldl %1;"
-             "fcos;" /* calcular la funcion coseno del valor en radianes del registro de la pila y guardar en st0 */
-             "fstpl %0;" : "=m" (resultado) : "m" (radianes));
+             "fcos;" /* calcular la funcion coseno del valor en grados del registro de la pila y guardar en st0 */
+             "fstpl %0;" : "=m" (resultado) : "m" (grados));
     return resultado;
 }
 
@@ -125,14 +126,14 @@ double tangente(double seno, double coseno){
     return resultado;
 }
 
-double conversorRadianes(double grados){
+double conversorGrados(double grados){
     const double segundoCuadrante = 180;
     double resultado;
     __asm__ ("fldl %1;"
              "fldl %2;"
              "fldpi;"
              "fmulp;"
-             "fdivp;" /* Mediante la formula (grados *(pi / segundoCuadrante)) obtenemos el valor en radianes */
+             "fdivp;" /* Mediante la formula (grados *(pi / segundoCuadrante)) obtenemos el valor en grados */
              "fstpl %0;" : "=m" (resultado) : "m" (segundoCuadrante), "m" (grados));
     return resultado;
 }
